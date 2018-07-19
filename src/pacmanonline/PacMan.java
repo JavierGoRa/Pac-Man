@@ -45,23 +45,23 @@ public class PacMan extends Application {
         primaryStage.show();
 
 //---------------------   CODIGO DE LA IMAGEN PAC MAN   ------------------------
-        Image imagePacMan1 = new Image("pacmanonline/PacManImagen1.png");
+        Image imagePacMan1 = new Image("pacmanonline/PacManImagen.gif");
+        
         ImageView imageView = new ImageView();
-        imageView.setImage(imagePacMan1);
+        
         
         imageView.setTranslateX(posPacManX);
         imageView.setTranslateY(posPacManY);
         
-        paneRoot.getChildren().add(imageView);
+        imageView.setImage(imagePacMan1);
+            paneRoot.getChildren().add(imageView);
         
-        while(vivo = true){
-            
-        };
+        
         
 //------------------------------------------------------------------------------
         
         
-//----------------------   ANIMACION DEL JUEGO   -------------------------------        
+//------------------------   ANIMACION DEL JUEGO   -----------------------------        
         AnimationTimer animationPacMan;
         animationPacMan = new AnimationTimer(){
             @Override
@@ -74,6 +74,7 @@ public class PacMan extends Application {
 //------------------------------------------------------------------------------
         
 //        scenePrincipal.setOnKeyPressed((KeyEvent event)-> {
+//            @Override
 //            switch(event.getCode()) {
 //                
 //            }
