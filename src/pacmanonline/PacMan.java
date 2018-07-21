@@ -5,12 +5,12 @@
  */
 package pacmanonline;
 
-import java.awt.event.KeyEvent;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -29,19 +29,21 @@ public class PacMan extends Application {
     double posPacManX = sceneTamX/2;
     double posPacManY = sceneTamY/2;
     
+    double velPacManX;
+    double velPacManY;
+    
     boolean vivo = true;
     
-    @Override
     public void start(Stage primaryStage) {
 
         paneRoot = new Pane();
 
         //Crear el panel principal
-        Scene scenePrincipal = new Scene(paneRoot, sceneTamX, sceneTamY);
+        Scene scene = new Scene(paneRoot, sceneTamX, sceneTamY);
 
         //Muestra el panel madre donde contendra todo
         primaryStage.setTitle("Pac - Man Online");
-        primaryStage.setScene(scenePrincipal);
+        primaryStage.setScene(scene);
         primaryStage.show();
 
 //---------------------   CODIGO DE LA IMAGEN PAC MAN   ------------------------
@@ -55,37 +57,69 @@ public class PacMan extends Application {
         
         imageView.setImage(imagePacMan1);
             paneRoot.getChildren().add(imageView);
-        
-        
-        
 //------------------------------------------------------------------------------
-        
         
 //------------------------   ANIMACION DEL JUEGO   -----------------------------        
         AnimationTimer animationPacMan;
         animationPacMan = new AnimationTimer(){
-            @Override
             public void handle(long now) {
-                posPacManX ++;
+                posPacManX += velPacManX;
                 imageView.setTranslateX(posPacManX);
+                posPacManY += velPacManY;
+                imageView.setTranslateX(posPacManY);
+                
+                
+                
+                
             }
         };
         animationPacMan.start();
 //------------------------------------------------------------------------------
         
-//        scenePrincipal.setOnKeyPressed((KeyEvent event)-> {
-//            @Override
-//            switch(event.getCode()) {
-//                
-//            }
-//
-//        });
-//        
-//        scene.setOnKeyReleased((KeyEvent event) -> {
-//            switch(event.getCode()){
-//               
-//            }
-//        });
+        scene.setOnKeyPressed((KeyEvent event) -> {
+            
+            switch(event.getCode()) {
+                case UP:
+                    velPacManY = 2;
+                    velPacManX = 0;
+                    
+                    System.out.println("velPacManY = " + velPacManY );
+                    System.out.println("velPacManX = " + velPacManX );
+                    break;
+                    
+                case DOWN:
+                    velPacManY = -2;
+                    velPacManX = 0;
+                    
+                    System.out.println("velPacManY = " + velPacManY );
+                    System.out.println("velPacManX = " + velPacManX );
+                    break;
+                    
+                case LEFT:
+                    velPacManX = -2;
+                    velPacManY = 0;
+                    
+                    System.out.println("velPacManY = " + velPacManY );
+                    System.out.println("velPacManX = " + velPacManX );
+                    break;
+                    
+                case RIGHT:
+                    velPacManX = 2;
+                    velPacManY = 0;
+                    
+                    System.out.println("velPacManY = " + velPacManY );
+                    System.out.println("velPacManX = " + velPacManX );
+                    break;
+                     
+            }
+
+        });
+        
+        scene.setOnKeyReleased((KeyEvent event) -> {
+            switch(event.getCode()){
+               
+            }
+        });
         
     }
 
