@@ -3,6 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+/*
+ * 
+ * Autor : Javier González Ramírez
+ * Email : javigora97@gmail.com
+ *
+*/
+
 package pacmanonline;
 
 import javafx.animation.AnimationTimer;
@@ -12,6 +20,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 /**
@@ -50,15 +61,22 @@ public class PacMan extends Application {
         Image imagePacMan1 = new Image("pacmanonline/PacManImagen.gif");
         
         ImageView imageView = new ImageView();
-        
-        
-        imageView.setTranslateX(posPacManX);
-        imageView.setTranslateY(posPacManY);
-        
         imageView.setImage(imagePacMan1);
-            paneRoot.getChildren().add(imageView);
+        
+        paneRoot.getChildren().add(imageView);
 //------------------------------------------------------------------------------
         
+//--------------------------   BOLA DE PUNTUACION   ----------------------------
+        Circle circleBola = new Circle();
+        circleBola.setFill(Color.RED);
+        circleBola.setRadius(3);
+        circleBola.setRadius(6);
+        circleBola.setTranslateX(200);
+        circleBola.setTranslateY(200);
+        paneRoot.getChildren().add(circleBola); 
+
+//------------------------------------------------------------------------------
+
 //------------------------   ANIMACION DEL JUEGO   -----------------------------        
         AnimationTimer animationPacMan;
         animationPacMan = new AnimationTimer(){
@@ -66,21 +84,18 @@ public class PacMan extends Application {
                 posPacManX += velPacManX;
                 imageView.setTranslateX(posPacManX);
                 posPacManY += velPacManY;
-                imageView.setTranslateX(posPacManY);
-                
-                
-                
-                
+                imageView.setTranslateY(posPacManY);
             }
         };
         animationPacMan.start();
 //------------------------------------------------------------------------------
         
+//------------------------   EVENTOS EN LOS CONTROLES   ------------------------
         scene.setOnKeyPressed((KeyEvent event) -> {
             
             switch(event.getCode()) {
                 case UP:
-                    velPacManY = 2;
+                    velPacManY = -2;
                     velPacManX = 0;
                     
                     System.out.println("velPacManY = " + velPacManY );
@@ -88,7 +103,7 @@ public class PacMan extends Application {
                     break;
                     
                 case DOWN:
-                    velPacManY = -2;
+                    velPacManY = 2;
                     velPacManX = 0;
                     
                     System.out.println("velPacManY = " + velPacManY );
@@ -110,9 +125,7 @@ public class PacMan extends Application {
                     System.out.println("velPacManY = " + velPacManY );
                     System.out.println("velPacManX = " + velPacManX );
                     break;
-                     
             }
-
         });
         
         scene.setOnKeyReleased((KeyEvent event) -> {
@@ -120,7 +133,13 @@ public class PacMan extends Application {
                
             }
         });
-        
+ //-----------------------------------------------------------------------------
+ 
+//        Shape shapeBolaPacMan = Shape.intersect(circleBola, imagePacMan1);
+//        boolean colisionVaciaNA = shapeBolaPacMan.getBoundsInLocal().isEmpty();
+//        if (colisionVaciaNA == false) {
+//            
+//        }
     }
 
 }
