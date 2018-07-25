@@ -15,16 +15,21 @@ package pacmanonline;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -48,6 +53,8 @@ public class PacMan extends Application {
     double velPacManY;
     
     boolean vivo = true;
+    
+    int score;
     
     public void start(Stage primaryStage) {
 
@@ -92,6 +99,45 @@ public class PacMan extends Application {
 
 //------------------------------------------------------------------------------
 
+//----------------------------   AREA 51   -------------------------------------
+//-------------------   PANEL  DE LAS VIDAS Y PUNTUACION   ---------------------
+
+HBox hBoxprincipal = new HBox();
+hBoxprincipal.setTranslateY(20);
+hBoxprincipal.setMinWidth(sceneTamX);
+hBoxprincipal.setAlignment(Pos.TOP_LEFT);
+hBoxprincipal.setSpacing(sceneTamX / 2);
+paneRoot.getChildren().add(hBoxprincipal);
+
+HBox hBoxPuntuacion = new HBox();
+hBoxPuntuacion.setSpacing(10);
+hBoxPuntuacion.setTranslateX(20);
+hBoxprincipal.getChildren().add(hBoxPuntuacion);
+
+HBox hBoxVidas = new HBox();
+hBoxVidas.setSpacing(10);
+hBoxVidas.setTranslateX(100);
+hBoxprincipal.getChildren().add(hBoxVidas);
+
+Text textTituloScore = new Text("Score:");
+textTituloScore.setFont(Font.font(20));
+textTituloScore.setFill(Color.BLACK);
+
+Text textScore = new Text("0");
+textScore.setFont(Font.font(20));
+textScore.setFill(Color.BLACK);
+
+Text textTituloScore1 = new Text("Score:");
+textTituloScore1.setFont(Font.font(20));
+textTituloScore1.setFill(Color.BLACK);
+
+hBoxPuntuacion.getChildren().add(textTituloScore);
+hBoxPuntuacion.getChildren().add(textScore);
+hBoxVidas.getChildren().add(textTituloScore1);
+
+
+//------------------------------------------------------------------------------
+
 //------------------------   ANIMACION DEL JUEGO   -----------------------------        
         AnimationTimer animationPacMan;
         animationPacMan = new AnimationTimer(){
@@ -109,6 +155,8 @@ public class PacMan extends Application {
                 boolean colisionVaciaNA = shapeBolaPacMan.getBoundsInLocal().isEmpty();
                 if (colisionVaciaNA == false) {
                     paneRoot.getChildren().remove(circleBola);
+                    score++;
+                    textScore.setText(String.valueOf(score));
                 }
             }
         };
@@ -160,7 +208,10 @@ public class PacMan extends Application {
         });
 //------------------------------------------------------------------------------
  
-        
+
+
+
+
     }
 
 }
