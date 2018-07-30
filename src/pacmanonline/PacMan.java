@@ -13,6 +13,7 @@
 
 package pacmanonline;
 
+import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -23,12 +24,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -56,10 +54,16 @@ public class PacMan extends Application {
     
     int score;
     
+    Bola bola;
+    
+    
+    
     public void start(Stage primaryStage) {
 
         paneRoot = new Pane();
-
+        
+        bola = new Bola(paneRoot);
+        
         //Crear el panel principal
         Scene scene = new Scene(paneRoot, sceneTamX, sceneTamY);
 
@@ -68,9 +72,9 @@ public class PacMan extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        
+//-------------------   CAJA DE CONTACTO DE PAC MAN   --------------------------        
         Polygon pacMan = new Polygon();
-        pacMan.setFill(Color.BLUE);
+        pacMan.setFill(Color.WHITE);
         pacMan.getPoints().addAll(new Double []{
             0.0, 0.0,
             20.0, 0.0,
@@ -78,6 +82,7 @@ public class PacMan extends Application {
             0.0, 20.0
         });
         paneRoot.getChildren().add(pacMan);
+//------------------------------------------------------------------------------        
         
 //---------------------   CODIGO DE LA IMAGEN PAC MAN   ------------------------
         Image imagePacMan1 = new Image("pacmanonline/PacManImagen.gif");
@@ -87,55 +92,48 @@ public class PacMan extends Application {
         
         paneRoot.getChildren().add(imageView);
 //------------------------------------------------------------------------------
-        
-//--------------------------   BOLA DE PUNTUACION   ----------------------------
-        Circle circleBola = new Circle();
-        circleBola.setFill(Color.RED);
-        circleBola.setRadius(3);
-        circleBola.setRadius(6);
-        circleBola.setTranslateX(200);
-        circleBola.setTranslateY(200);
-        paneRoot.getChildren().add(circleBola); 
 
+//--------------------------   LISTA DE BOLAS   --------------------------------
+        ArrayList <Bola> listaBola = new ArrayList();
+        for (int i = 0; i < 5; i++){
+            bola = new Bola(paneRoot);
+            listaBola.add(bola);
+        }
 //------------------------------------------------------------------------------
 
-//----------------------------   AREA 51   -------------------------------------
 //-------------------   PANEL  DE LAS VIDAS Y PUNTUACION   ---------------------
+        HBox hBoxprincipal = new HBox();
+        hBoxprincipal.setTranslateY(20);
+        hBoxprincipal.setMinWidth(sceneTamX);
+        hBoxprincipal.setAlignment(Pos.TOP_LEFT);
+        hBoxprincipal.setSpacing(sceneTamX / 2);
+        paneRoot.getChildren().add(hBoxprincipal);
 
-HBox hBoxprincipal = new HBox();
-hBoxprincipal.setTranslateY(20);
-hBoxprincipal.setMinWidth(sceneTamX);
-hBoxprincipal.setAlignment(Pos.TOP_LEFT);
-hBoxprincipal.setSpacing(sceneTamX / 2);
-paneRoot.getChildren().add(hBoxprincipal);
+        HBox hBoxPuntuacion = new HBox();
+        hBoxPuntuacion.setSpacing(10);
+        hBoxPuntuacion.setTranslateX(20);
+        hBoxprincipal.getChildren().add(hBoxPuntuacion);
 
-HBox hBoxPuntuacion = new HBox();
-hBoxPuntuacion.setSpacing(10);
-hBoxPuntuacion.setTranslateX(20);
-hBoxprincipal.getChildren().add(hBoxPuntuacion);
+        HBox hBoxVidas = new HBox();
+        hBoxVidas.setSpacing(10);
+        hBoxVidas.setTranslateX(100);
+        hBoxprincipal.getChildren().add(hBoxVidas);
 
-HBox hBoxVidas = new HBox();
-hBoxVidas.setSpacing(10);
-hBoxVidas.setTranslateX(100);
-hBoxprincipal.getChildren().add(hBoxVidas);
+        Text textTituloScore = new Text("Score:");
+        textTituloScore.setFont(Font.font(20));
+        textTituloScore.setFill(Color.BLACK);
 
-Text textTituloScore = new Text("Score:");
-textTituloScore.setFont(Font.font(20));
-textTituloScore.setFill(Color.BLACK);
+        Text textScore = new Text("0");
+        textScore.setFont(Font.font(20));
+        textScore.setFill(Color.BLACK);
 
-Text textScore = new Text("0");
-textScore.setFont(Font.font(20));
-textScore.setFill(Color.BLACK);
+        Text textTituloScore1 = new Text("Score:");
+        textTituloScore1.setFont(Font.font(20));
+        textTituloScore1.setFill(Color.BLACK);
 
-Text textTituloScore1 = new Text("Score:");
-textTituloScore1.setFont(Font.font(20));
-textTituloScore1.setFill(Color.BLACK);
-
-hBoxPuntuacion.getChildren().add(textTituloScore);
-hBoxPuntuacion.getChildren().add(textScore);
-hBoxVidas.getChildren().add(textTituloScore1);
-
-
+        hBoxPuntuacion.getChildren().add(textTituloScore);
+        hBoxPuntuacion.getChildren().add(textScore);
+        hBoxVidas.getChildren().add(textTituloScore1);
 //------------------------------------------------------------------------------
 
 //------------------------   ANIMACION DEL JUEGO   -----------------------------        
@@ -151,19 +149,22 @@ hBoxVidas.getChildren().add(textTituloScore1);
                 pacMan.setTranslateX(posPacManX);
                 pacMan.setTranslateY(posPacManY);
                 
-                Shape shapeBolaPacMan = Shape.intersect(circleBola, pacMan);
-                boolean colisionVaciaNA = shapeBolaPacMan.getBoundsInLocal().isEmpty();
-                if (colisionVaciaNA == false) {
-                    paneRoot.getChildren().remove(circleBola);
-                    score++;
-                    textScore.setText(String.valueOf(score));
+                for(int i = 0 ; i < listaBola.size() ; i++){
+                    bola = listaBola.get(i);
+                    Shape shapeBolaPacMan = Shape.intersect(bola.getBola(), pacMan);
+                    boolean colisionVaciaNA = shapeBolaPacMan.getBoundsInLocal().isEmpty();
+                    if (colisionVaciaNA == false) {
+                        paneRoot.getChildren().remove(bola.getBola());
+                        score++;
+                        textScore.setText(String.valueOf(score));
+                    }
                 }
             }
         };
         animationPacMan.start();
 //------------------------------------------------------------------------------
         
-//------------------------   EVENTOS EN LOS CONTROLES   ------------------------
+//-----------------------   EVENTOS EN LOS CONTROLES   -------------------------
         scene.setOnKeyPressed((KeyEvent event) -> {
             
             switch(event.getCode()) {
@@ -208,10 +209,5 @@ hBoxVidas.getChildren().add(textTituloScore1);
         });
 //------------------------------------------------------------------------------
  
-
-
-
-
     }
-
 }
