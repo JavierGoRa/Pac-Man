@@ -31,7 +31,6 @@ public class Bola {
             posBolaY = randomAsteroidePos.nextInt(600);
             circleBola.setTranslateX(posBolaX);
             circleBola.setTranslateY(posBolaY);
-            root.getChildren().add(circleBola); 
         }
         public Circle getBola(){
             return circleBola;
